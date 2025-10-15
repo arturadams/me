@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artur Adams | artur.cool</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at 50% 30%, #02151e 0%, #000a12 70%, #000 100%);
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+        color: #d9ffff;
+      }
+
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+
+      .container {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .title {
+        font-size: 4rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #d3f9ff;
+        text-shadow:
+          0 0 15px #9ef2ff,
+          0 0 40px #6ae4ff,
+          0 0 80px #33d8ff;
+        animation: icePulse 6s ease-in-out infinite;
+      }
+
+      @keyframes icePulse {
+        0%, 100% { text-shadow: 0 0 20px #7deaff, 0 0 50px #9df6ff; }
+        50% { text-shadow: 0 0 40px #fff, 0 0 90px #b3fbff; }
+      }
+
+      .buttons {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .button {
+        border: 2px solid #8ff6ff;
+        color: #dffbff;
+        text-decoration: none;
+        padding: 0.6rem 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        backdrop-filter: blur(6px);
+      }
+
+      .button:hover {
+        background: rgba(155, 244, 255, 0.25);
+        box-shadow: 0 0 12px #6ef0ff, 0 0 30px #7cf7ff;
+        transform: scale(1.07);
+      }
+
+      footer {
+        position: fixed;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        color: #7ee8ff;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="heroCanvas"></canvas>
+    <div class="container">
+      <div class="title">Artur Adams</div>
+      <div class="buttons">
+        <a href="mailto:me@artur.cool" class="button">Contact</a>
+        <a href="https://github.com/adamsartur" class="button">GitHub</a>
+        <a href="https://www.linkedin.com/in/arturadams/" class="button">LinkedIn</a>
+      </div>
+      <footer>© 2025 artur.cool</footer>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('heroCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+
+      const particles = [];
+      const maxParticles = 100;
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 1.5 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.speedY = Math.random() * 0.6 + 0.2;
+          this.alpha = Math.random() * 0.4 + 0.3;
+          this.hue = 190 + Math.random() * 30;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.y > canvas.height) {
+            this.y = -10;
+            this.x = Math.random() * canvas.width;
+          }
+        }
+        draw() {
+          ctx.beginPath();
+          const gradient = ctx.createLinearGradient(this.x, this.y - 15, this.x, this.y + 5);
+          gradient.addColorStop(0, `hsla(${this.hue}, 100%, 85%, ${this.alpha})`);
+          gradient.addColorStop(1, `hsla(${this.hue}, 100%, 55%, 0)`);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = this.size * 0.8;
+          ctx.moveTo(this.x, this.y - 15);
+          ctx.lineTo(this.x, this.y + 5);
+          ctx.stroke();
+        }
+      }
+
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(new Particle());
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(0, 10, 20, 0.08)'; // darker background fade
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      window.addEventListener('resize', () => {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+      });
+    </script>
+  </body>
+</html>
