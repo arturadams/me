@@ -1,0 +1,79 @@
+---
+import EasterEgg from "../components/EasterEgg.astro";
+import Lattice from "../components/Lattice.astro";
+import SvgDefs from "../components/SvgDefs.astro";
+import TrailLayer from "../components/TrailLayer.astro";
+import { site } from "../data/site";
+import "../styles/global.css";
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  sameAs: [site.social.linkedin, site.social.github],
+};
+
+const favicon =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307080B'/%3E%3Cpath d='M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z' fill='%23D8B36A'/%3E%3Ccircle cx='16' cy='16' r='1.8' fill='%2307080B'/%3E%3C/svg%3E";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={site.title} />
+    <meta
+      property="og:description"
+      content="Full-stack software developer. Systems built end to end, and quiet by design."
+    />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#07080B" />
+    <link rel="icon" href={favicon} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
+
+    {/* Mark the document before first paint so entrance styles never flash. */}
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+
+  <body>
+    <a
+      class="skip absolute left-4 -top-16 z-[90] bg-gold px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] text-[#0B0A08] no-underline transition-[top] duration-200 focus:top-4"
+      href="#main">Skip to content</a
+    >
+
+    <TrailLayer />
+    <SvgDefs />
+
+    <Lattice />
+    <slot />
+    <Lattice />
+
+    <EasterEgg />
+
+    <script>
+      // Page-wide, so it lives with the shell rather than any one section.
+      import { initReveal } from "../scripts/reveal";
+      initReveal();
+    </script>
+  </body>
+</html>

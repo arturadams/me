@@ -1,0 +1,56 @@
+---
+interface Props {
+  id?: string;
+  /** Oversized kanji watermark, outlined. Decorative. */
+  ghost?: string;
+  /** Fraction down this section where the trail passes through, 0–1. */
+  trail: number;
+  /** Fraction across the viewport where the trail sits at that point, 0–1. */
+  trailX: number;
+  labelledby?: string;
+  ariaLabel?: string;
+}
+
+const { id, ghost, trail, trailX, labelledby, ariaLabel } = Astro.props;
+---
+
+<section
+  class="block overflow-hidden py-[clamp(4.5rem,10vw,8rem)]"
+  id={id}
+  data-trail={trail}
+  data-trail-x={trailX}
+  aria-labelledby={labelledby}
+  aria-label={ariaLabel}
+>
+  <div class="wrap relative">
+    {
+      ghost && (
+        <span class="ghost-kanji" lang="ja" aria-hidden="true">
+          {ghost}
+        </span>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .block + .block {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .ghost-kanji {
+    position: absolute;
+    top: -0.6rem;
+    right: -0.02em;
+    z-index: -1; /* never crosses type */
+    font-family: var(--font-jp);
+    font-size: clamp(5rem, 13vw, 10rem);
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(216, 179, 106, 0.14);
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

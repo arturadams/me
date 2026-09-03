@@ -1,0 +1,102 @@
+---
+import { stats } from "../data/stats";
+import Eyebrow from "./Eyebrow.astro";
+import Section from "./Section.astro";
+import SectionTitle from "./SectionTitle.astro";
+---
+
+<Section trail={0.4} trailX={0.1} labelledby="craft-title">
+  <div class="craft-grid">
+    <div class="reveal">
+      <Eyebrow kanji="匠" label="The Craft" />
+      <SectionTitle id="craft-title">Built by one hand, <em>quiet by design</em>.</SectionTitle>
+      <p>
+        Most software fails at the seams — where the frontend team's assumptions meet the backend
+        team's reality. Working full-stack means there are no seams to fail: <strong
+          >the person shaping the API is the same person consuming it.</strong
+        >
+      </p>
+      <p>
+        Eight years in, my work spans fintech platforms moving real money, developer tools with
+        demanding users, and consumer products where 200&nbsp;ms of delay is a design flaw.
+        Different domains, one standard: restraint everywhere, precision where it counts.
+      </p>
+    </div>
+
+    <div class="stats reveal">
+      {
+        stats.map((stat) => (
+          <div class="stat">
+            <b>
+              <span data-count={stat.value} data-decimals={stat.decimals}>
+                0
+              </span>
+              {stat.suffix && <sup>{stat.suffix}</sup>}
+            </b>
+            <span>{stat.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  .craft-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+  @media (max-width: 48rem) {
+    .craft-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .craft-grid p {
+    margin: 0 0 1.1rem;
+    max-width: 58ch;
+    color: var(--color-muted);
+  }
+  .craft-grid p:last-child {
+    margin-bottom: 0;
+  }
+  .craft-grid strong {
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+
+  .stats {
+    display: grid;
+    gap: 1.9rem;
+  }
+  .stat {
+    border-top: 1px solid var(--color-gold-deep);
+    padding-top: 1rem;
+  }
+  .stat b {
+    display: block;
+    font-size: 2.6rem;
+    font-weight: 500;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-gold);
+  }
+  .stat sup {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+  }
+  .stat > span {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+</style>
+
+<script>
+  import { initCounters } from "../scripts/counters";
+  initCounters();
+</script>

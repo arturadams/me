@@ -1,0 +1,22 @@
+---
+// A thin band of kumiko lattice. Used as page trim and as card headers.
+---
+
+<div class="lattice" aria-hidden="true">
+  <svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"></rect></svg>
+</div>
+
+<style>
+  .lattice {
+    height: 9px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    opacity: 0.6;
+  }
+  .lattice svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

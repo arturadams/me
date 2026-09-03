@@ -1,0 +1,24 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+<h2 class="section-title" id={id}><slot /></h2>
+
+<style>
+  .section-title {
+    margin: 0 0 1.5rem;
+    max-width: 24ch;
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+  .section-title :global(em) {
+    font-style: italic;
+    color: var(--color-gold);
+  }
+</style>

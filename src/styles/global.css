@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+/* ============================================================
+   KAGE — night steel & gold
+   Design tokens live here and nowhere else. Component-specific
+   effects live in the scoped <style> block of the component that
+   owns them, reading these variables directly.
+   ============================================================ */
+
+@theme {
+  /* palette */
+  --color-sumi: #07080b; /* base night */
+  --color-sumi-2: #0c0e14; /* raised surfaces */
+  --color-paper: #eceae1; /* washi */
+  --color-muted: #8c93a2; /* cool grey — 6.2:1 on sumi */
+  --color-gold: #d8b36a; /* brass, the single accent — 10:1 on sumi */
+  --color-gold-deep: #9a7526;
+  --color-gold-pale: #f1dda6;
+  --color-blade: #c6d6e6; /* cold steel, used sparingly */
+  --color-line: rgba(236, 234, 225, 0.12);
+
+  /* type */
+  --font-serif:
+    "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052,
+    Georgia, serif;
+  --font-mono:
+    ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-jp:
+    "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", "Source Han Serif", "MS Mincho",
+    serif;
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-sheen: sheen 6s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+  --animate-spin-slow: spin 120s linear infinite;
+
+  @keyframes sheen {
+    0%,
+    100% {
+      background-position: 0% 0;
+    }
+    50% {
+      background-position: 100% 0;
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background:
+      radial-gradient(80rem 46rem at 80% -8%, rgba(52, 78, 140, 0.16), transparent 62%),
+      radial-gradient(60rem 38rem at 6% 108%, rgba(216, 179, 106, 0.05), transparent 58%),
+      var(--color-sumi);
+    color: var(--color-paper);
+    font-family: var(--font-serif);
+    font-size: 1.075rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* film grain — static, keeps flat black from reading as digital */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: #0b0a08;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-sumi);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e222d;
+    border-radius: 5px;
+    border: 2px solid var(--color-sumi);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+  /* skip-link target only — never a visible ring */
+  main:focus {
+    outline: none;
+  }
+}
+
+/* Shared across enough components to justify being global. */
+@utility gilt {
+  font-style: italic;
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-deep),
+    var(--color-gold-pale) 45%,
+    var(--color-gold-deep) 90%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-sheen);
+}
+
+@utility wrap {
+  max-width: 74rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+/* Entrance primitives. Global because they cross component boundaries — a
+   parent applies .fade-up to a child component's root, which carries the
+   child's scope hash, so a scoped rule would never match.
+   Contract: .js is set before first paint; .loaded on window load; .in by
+   the IntersectionObserver. Without JS everything is simply visible. */
+@layer base {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
+  }
+  .js .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .fade-up {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.9s ease 0.45s,
+      transform 0.9s ease 0.45s;
+  }
+  .js.loaded .fade-up {
+    opacity: 1;
+    transform: none;
+  }
+  .js .fade-up.later {
+    transition-delay: 0.65s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal,
+  .js .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  /* biome-ignore-start lint/complexity/noImportantStyles: a global motion kill
+     switch has to outrank component-scoped animations by design */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  /* biome-ignore-end lint/complexity/noImportantStyles: end kill switch */
+}

@@ -1,0 +1,72 @@
+---
+import { process } from "../data/process";
+import Eyebrow from "./Eyebrow.astro";
+import Section from "./Section.astro";
+import SectionTitle from "./SectionTitle.astro";
+---
+
+<Section id="way" ghost="道" trail={0.5} trailX={0.88} labelledby="way-title">
+  <Eyebrow kanji="道" label="The Way" />
+  <SectionTitle id="way-title">Scout. Plan. Strike. <em>Vanish.</em></SectionTitle>
+
+  <div class="way">
+    {
+      process.map((step) => (
+        <div class="step reveal">
+          <span class="kj" lang="ja" aria-hidden="true">
+            {step.kanji}
+          </span>
+          <h3>{step.title}</h3>
+          <p>{step.body}</p>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .way {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin-top: 3.5rem;
+  }
+  @media (max-width: 60rem) {
+    .way {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 36rem) {
+    .way {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .step {
+    position: relative;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--color-line);
+  }
+  /* the seal sits astride the rule */
+  .kj {
+    position: absolute;
+    top: -1.05rem;
+    left: -0.15rem;
+    padding: 0 0.6rem;
+    background: var(--color-sumi);
+    font-family: var(--font-jp);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    color: var(--color-gold);
+  }
+  h3 {
+    margin: 0.5rem 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+</style>

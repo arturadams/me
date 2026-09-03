@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Artur Adams — Move unseen. Land precisely.</title>
+
+<meta name="description" content="Artur Adams — full-stack software developer. Products built end to end, from database to last pixel, and handed over quiet enough to forget about. São Paulo, working worldwide.">
+<meta name="author" content="Artur Adams">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.artur.ninja/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Artur Adams — Move unseen. Land precisely.">
+<meta property="og:description" content="Full-stack software developer. Systems built end to end, and quiet by design.">
+<meta property="og:url" content="https://www.artur.ninja/">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#07080B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307080B'/%3E%3Cpath d='M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z' fill='%23D8B36A'/%3E%3Ccircle cx='16' cy='16' r='1.8' fill='%2307080B'/%3E%3C/svg%3E">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Artur Adams",
+  "url": "https://www.artur.ninja",
+  "jobTitle": "Full-Stack Software Developer",
+  "email": "mailto:adamsartur@gmail.com",
+  "sameAs": [
+    "https://linkedin.com/in/arturadams",
+    "https://github.com/arturadams"
+  ]
+}
+</script>
+
+<!-- no-JS-flash guard: mark the document before first paint -->
+<script>document.documentElement.classList.add("js");</script>
+
+<style>
+  /* ============================================================
+     KAGE — night steel & gold
+     A single committed dark world: moonlight on lacquer.
+     Warm kintsugi lacquer, cooled to sumi ink and blade steel.
+     ============================================================ */
+  :root {
+    --sumi: #07080B;          /* base night */
+    --sumi-2: #0C0E14;        /* raised surfaces */
+    --paper: #ECEAE1;         /* washi */
+    --muted: #8C93A2;         /* cool grey — AA on --sumi */
+    --gold: #D8B36A;          /* brass, the single accent */
+    --gold-deep: #9A7526;
+    --gold-pale: #F1DDA6;
+    --blade: #C6D6E6;         /* cold steel, used sparingly */
+    --indigo: rgba(52, 78, 140, 0.16);
+    --line: rgba(236, 234, 225, 0.12);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --jp: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", "Source Han Serif", "MS Mincho", serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(80rem 46rem at 80% -8%, var(--indigo), transparent 62%),
+      radial-gradient(60rem 38rem at 6% 108%, rgba(216, 179, 106, 0.05), transparent 58%),
+      var(--sumi);
+    color: var(--paper);
+    font-family: var(--serif);
+    font-size: 1.075rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* film grain — static, cheap, keeps the flat black from looking digital */
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none;
+    opacity: 0.035; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  a { color: inherit; }
+  ::selection { background: var(--gold); color: #0B0A08; }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--sumi); }
+  ::-webkit-scrollbar-thumb { background: #1E222D; border-radius: 5px; border: 2px solid var(--sumi); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold-deep); }
+
+  .wrap { max-width: 74rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
+  h1, h2, h3 { text-wrap: balance; }
+
+  .skip {
+    position: absolute; left: 1rem; top: -4rem; z-index: 90;
+    background: var(--gold); color: #0B0A08; padding: 0.7rem 1.2rem;
+    font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em;
+    text-transform: uppercase; text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip:focus { top: 1rem; }
+
+  /* ---------- the trail (scroll-drawn) ---------- */
+  #trail-wrap {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  #trail-svg { display: block; width: 100%; }
+  #trail-path {
+    stroke: var(--gold); stroke-width: 1.4; fill: none;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 7px rgba(216, 179, 106, 0.5));
+    opacity: 0.8;
+  }
+  #trail-ghost {
+    stroke: rgba(236, 234, 225, 0.07); stroke-width: 1; fill: none;
+    stroke-dasharray: 2 7;
+    vector-effect: non-scaling-stroke;
+  }
+  #trail-head {
+    fill: var(--blade);
+    filter: drop-shadow(0 0 9px rgba(198, 214, 230, 0.9));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .trail-node {
+    fill: #171B24; stroke: rgba(216, 179, 106, 0.3); stroke-width: 1;
+    transition: fill 0.6s ease, stroke 0.6s ease;
+  }
+  .trail-node.lit { fill: var(--gold); stroke: var(--gold-pale); filter: drop-shadow(0 0 6px rgba(216, 179, 106, 0.75)); }
+
+  header.site, main, footer.contact { position: relative; z-index: 1; }
+
+  /* ---------- kumiko lattice trim ---------- */
+  .lattice { height: 9px; overflow: hidden; position: relative; z-index: 2; opacity: 0.6; }
+  .lattice svg { display: block; width: 100%; height: 100%; }
+
+  /* ---------- header ---------- */
+  header.site {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    max-width: 74rem; margin: 0 auto;
+    padding: 1.6rem clamp(1.25rem, 4vw, 3rem);
+  }
+  .mark {
+    font-size: 1.05rem; font-weight: 600; letter-spacing: 0.02em; text-decoration: none;
+    display: inline-flex; align-items: baseline; gap: 0.1rem;
+  }
+  .mark em { font-style: normal; color: var(--gold); }
+  .mark .star {
+    display: inline-block; width: 0.62em; height: 0.62em; margin-left: 0.45rem;
+    align-self: center; fill: var(--gold);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mark:hover .star, .mark:focus-visible .star { transform: rotate(180deg); }
+
+  nav.site-nav { display: flex; gap: 1.8rem; align-items: center; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; }
+  nav.site-nav a {
+    text-decoration: none; color: var(--muted); padding-bottom: 2px;
+    background: linear-gradient(var(--gold), var(--gold)) no-repeat left bottom / 0 1px;
+    transition: background-size 0.25s ease, color 0.25s ease;
+  }
+  nav.site-nav a:hover, nav.site-nav a:focus-visible { color: var(--paper); background-size: 100% 1px; }
+  .avail { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--gold); }
+  .avail::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @media (max-width: 46rem) { nav.site-nav a:not(.avail) { display: none; } }
+
+  /* ---------- shared bits ---------- */
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: 0.7rem; margin: 0 0 1.5rem;
+  }
+  /* seal, then rule, then label — the text is an anonymous flex item, so it lands last */
+  .eyebrow .kj { font-family: var(--jp); font-size: 1.15rem; letter-spacing: 0; color: var(--gold); line-height: 1; order: -2; }
+  .eyebrow::after { content: ""; width: 2.6rem; height: 1px; background: var(--gold); flex: none; order: -1; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; }
+  #motes { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+  .hero-inner { position: relative; z-index: 2; padding: clamp(4rem, 11vw, 9rem) 0 clamp(5rem, 11vw, 8rem); }
+
+  .crest {
+    position: absolute; z-index: 1;
+    top: clamp(0rem, 4vw, 3rem); right: clamp(-8rem, 0vw, 6rem);
+    width: clamp(18rem, 40vw, 33rem); height: clamp(18rem, 40vw, 33rem);
+  }
+  @media (max-width: 52rem) { .crest { top: auto; bottom: -9rem; right: -7rem; opacity: 0.45; } }
+  .shuriken {
+    transform-box: fill-box; transform-origin: center;
+    animation: spin 120s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  h1.hero-title {
+    font-size: clamp(2.8rem, 8vw, 6.6rem);
+    line-height: 1.01; font-weight: 500; letter-spacing: -0.02em;
+    margin: 0 0 2.2rem; max-width: 12ch;
+  }
+  h1.hero-title .line { display: block; overflow: hidden; }
+  h1.hero-title .line > span { display: block; }
+  .js h1.hero-title .line > span { transform: translateY(110%); transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+  .js.loaded h1.hero-title .line > span { transform: none; }
+  .js h1.hero-title .line:nth-child(2) > span { transition-delay: 0.12s; }
+  .js h1.hero-title .line:nth-child(3) > span { transition-delay: 0.24s; }
+  .gilt {
+    font-style: italic;
+    background: linear-gradient(100deg, var(--gold-deep), var(--gold-pale) 45%, var(--gold-deep) 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% 100%;
+    animation: sheen 6s ease-in-out infinite;
+  }
+  @keyframes sheen { 0%, 100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
+
+  .hero p.lede { max-width: 34rem; font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--muted); margin: 0 0 2.8rem; }
+  .hero p.lede strong { color: var(--paper); font-weight: 600; }
+  .js .fade-up { opacity: 0; transform: translateY(14px); transition: opacity 0.9s ease 0.45s, transform 0.9s ease 0.45s; }
+  .js.loaded .fade-up { opacity: 1; transform: none; }
+  .js .fade-up.later { transition-delay: 0.65s; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  .btn {
+    font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; padding: 0.95rem 1.7rem; border: 1px solid var(--gold);
+    position: relative; overflow: hidden; isolation: isolate;
+    transition: color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .btn-solid { background: var(--gold); color: #0B0A08; font-weight: 700; }
+  .btn-solid:hover, .btn-solid:focus-visible { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(216, 179, 106, 0.3); }
+  .btn-ghost { color: var(--paper); }
+  .btn-ghost::after {
+    content: ""; position: absolute; inset: 0; background: var(--gold);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; z-index: -1;
+  }
+  .btn-ghost:hover, .btn-ghost:focus-visible { color: #0B0A08; }
+  .btn-ghost:hover::after, .btn-ghost:focus-visible::after { transform: scaleX(1); }
+
+  .hero-meta {
+    margin-top: clamp(3.5rem, 8vw, 6rem); padding-top: 1.4rem; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 0.6rem 2.5rem;
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .hero-meta .dot { color: var(--gold); }
+
+  /* ---------- sections ---------- */
+  section.block { padding: clamp(4.5rem, 10vw, 8rem) 0; overflow: hidden; }
+  section.block + section.block { border-top: 1px solid var(--line); }
+  h2.section-title { font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 500; line-height: 1.1; margin: 0 0 1.5rem; max-width: 24ch; letter-spacing: -0.015em; }
+  h2.section-title em { font-style: italic; color: var(--gold); }
+
+  .ghost-kanji {
+    position: absolute; top: -0.6rem; right: -0.02em; z-index: -1; /* never crosses type */
+    font-family: var(--jp); font-size: clamp(5rem, 13vw, 10rem); font-weight: 500;
+    line-height: 1; color: transparent;
+    -webkit-text-stroke: 1px rgba(216, 179, 106, 0.14);
+    pointer-events: none; user-select: none; white-space: nowrap;
+  }
+
+  /* ---------- craft ---------- */
+  .craft-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+  @media (max-width: 48rem) { .craft-grid { grid-template-columns: 1fr; } }
+  .craft-grid p { margin: 0 0 1.1rem; max-width: 58ch; color: var(--muted); }
+  .craft-grid p strong { color: var(--paper); font-weight: 600; }
+  .craft-grid p:last-child { margin-bottom: 0; }
+  .stats { display: grid; gap: 1.9rem; }
+  .stat { border-top: 1px solid var(--gold-deep); padding-top: 1rem; }
+  .stat b { display: block; font-size: 2.6rem; font-weight: 500; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--gold); }
+  .stat b sup { font-size: 1.1rem; color: var(--muted); }
+  .stat span { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------- creed band (replaces the old tech marquee) ---------- */
+  .creed {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    position: relative; overflow: hidden;
+    background-color: rgba(236, 234, 225, 0.014);
+  }
+  /* kumiko lattice, drawn in CSS so the band costs nothing */
+  .creed::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image:
+      repeating-linear-gradient(60deg, rgba(216, 179, 106, 0.07) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(-60deg, rgba(216, 179, 106, 0.07) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(0deg, rgba(216, 179, 106, 0.05) 0 1px, transparent 1px 26px);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  }
+  .creed-inner { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 52rem) { .creed-inner { grid-template-columns: 1fr; } }
+  .tenet { padding: clamp(2.2rem, 4.5vw, 3.4rem) clamp(1.4rem, 3vw, 2.6rem); border-left: 1px solid var(--line); }
+  .tenet:first-child { border-left: 0; }
+  @media (max-width: 52rem) {
+    .tenet { border-left: 0; border-top: 1px solid var(--line); }
+    .tenet:first-child { border-top: 0; }
+  }
+  .tenet .kj {
+    font-family: var(--jp); font-size: 2.9rem; line-height: 1; color: var(--gold);
+    display: block; margin-bottom: 0.7rem;
+    text-shadow: 0 0 26px rgba(216, 179, 106, 0.25);
+  }
+  .tenet .romaji { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.9rem; }
+  .tenet p { margin: 0; font-size: 1.02rem; line-height: 1.6; max-width: 26ch; }
+
+  /* ---------- work ---------- */
+  .work-intro { color: var(--muted); max-width: 36rem; margin: 0 0 3rem; }
+  article.project {
+    display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) minmax(0, 14rem);
+    gap: 1rem 2.5rem; padding: 2.4rem 1rem;
+    border-top: 1px solid var(--line);
+    position: relative; overflow: hidden;
+    transition: padding-left 0.35s ease, background 0.35s ease;
+  }
+  article.project:last-child { border-bottom: 1px solid var(--line); }
+  article.project::before {
+    content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 0;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transition: width 0.55s ease;
+  }
+  article.project:hover { padding-left: 1.6rem; background: rgba(216, 179, 106, 0.03); }
+  article.project:hover::before { width: 100%; }
+  @media (max-width: 52rem) { article.project { grid-template-columns: 1fr; gap: 0.6rem; } }
+  .proj-num {
+    position: absolute; right: 0; bottom: -1.8rem;
+    font-family: var(--jp); font-size: 8.5rem; line-height: 1; color: transparent;
+    -webkit-text-stroke: 1px rgba(216, 179, 106, 0);
+    pointer-events: none; user-select: none;
+    transition: -webkit-text-stroke-color 0.5s ease, transform 0.5s ease;
+  }
+  article.project:hover .proj-num { -webkit-text-stroke-color: rgba(216, 179, 106, 0.2); transform: translateY(-6px); }
+  .project .year { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.14em; color: var(--gold); padding-top: 0.4rem; }
+  .project h3 { font-size: 1.55rem; font-weight: 600; margin: 0 0 0.5rem; }
+  .project p { margin: 0; color: var(--muted); max-width: 54ch; }
+  .project .outcome { align-self: center; position: relative; z-index: 1; }
+  .project .outcome b { display: block; font-size: 1.7rem; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--gold); }
+  .project .outcome span { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  ul.tags { padding: 0; margin: 1.1rem 0 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .tags li {
+    list-style: none; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em;
+    padding: 0.26rem 0.6rem; border: 1px solid var(--line); color: var(--muted);
+  }
+
+  /* ---------- the kit ---------- */
+  .kit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 3rem; }
+  @media (max-width: 52rem) { .kit-grid { grid-template-columns: 1fr; } }
+  .kit-col {
+    background: rgba(236, 234, 225, 0.022); border: 1px solid var(--line);
+    padding: 0 1.6rem 1.8rem;
+    transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+  }
+  .kit-col:hover { border-color: rgba(216, 179, 106, 0.4); transform: translateY(-4px); background: rgba(236, 234, 225, 0.035); }
+  .kit-col .lattice { margin: 0 -1.6rem 1.5rem; }
+  .kit-col .kj { font-family: var(--jp); font-size: 2rem; line-height: 1; color: var(--gold); display: block; margin-bottom: 0.5rem; }
+  .kit-col h3 { font-size: 1.15rem; font-weight: 600; margin: 0 0 0.3rem; }
+  .kit-col p.role { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin: 0 0 1.3rem; }
+  .kit-col ul { margin: 0; padding: 0; display: grid; gap: 0.55rem; }
+  .kit-col li { list-style: none; display: flex; align-items: baseline; gap: 0.65rem; font-size: 0.98rem; color: var(--muted); }
+  .kit-col li::before {
+    content: ""; flex: none; width: 6px; height: 6px; transform: rotate(45deg) translateY(-1px);
+    border: 1px solid var(--gold);
+  }
+
+  /* ---------- the way ---------- */
+  .way { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 3.5rem; }
+  @media (max-width: 60rem) { .way { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 36rem) { .way { grid-template-columns: 1fr; } }
+  .step { border-top: 1px solid var(--line); padding-top: 1.4rem; position: relative; }
+  .step .kj {
+    position: absolute; top: -1.05rem; left: -0.15rem; padding: 0 0.6rem;
+    background: var(--sumi);
+    font-family: var(--jp); font-size: 1.5rem; line-height: 1.4; color: var(--gold);
+  }
+  .step h3 { font-size: 1.15rem; font-weight: 600; margin: 0.5rem 0 0.5rem; }
+  .step p { margin: 0; font-size: 0.95rem; color: var(--muted); }
+
+  /* ---------- quote ---------- */
+  .quote { margin: 0; max-width: 48rem; border-left: 2px solid var(--gold-deep); padding-left: clamp(1.4rem, 3vw, 2.4rem); }
+  .quote blockquote { margin: 0; font-size: clamp(1.4rem, 2.9vw, 2.1rem); font-style: italic; line-height: 1.45; }
+  .quote blockquote::before { content: "\201C"; color: var(--gold); }
+  .quote blockquote::after { content: "\201D"; color: var(--gold); }
+  .quote figcaption { margin-top: 1.3rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------- contact ---------- */
+  footer.contact { border-top: 1px solid var(--line); }
+  .contact-inner { padding: clamp(5rem, 11vw, 9rem) 0 clamp(2.5rem, 5vw, 3.5rem); position: relative; }
+  footer h2 { font-size: clamp(2.4rem, 6vw, 4.6rem); font-weight: 500; line-height: 1.05; margin: 0 0 1.6rem; max-width: 16ch; letter-spacing: -0.015em; }
+  footer p.pitch { max-width: 35rem; color: var(--muted); margin: 0 0 2.6rem; }
+  .email-link {
+    font-family: var(--mono); font-size: clamp(1rem, 2.4vw, 1.35rem); color: var(--paper);
+    text-decoration: none; border-bottom: 2px solid var(--gold); padding-bottom: 0.25rem;
+    transition: color 0.2s ease;
+  }
+  .email-link:hover, .email-link:focus-visible { color: var(--gold); }
+  .footer-base {
+    margin-top: clamp(3.5rem, 8vw, 5.5rem); padding-top: 1.4rem; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.8rem 2rem;
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-base a { color: var(--muted); text-decoration: none; }
+  .footer-base a:hover, .footer-base a:focus-visible { color: var(--gold); }
+  .footer-links { display: flex; gap: 1.6rem; }
+
+  /* ---------- hidden scroll (typed easter egg) ---------- */
+  #smoke {
+    position: fixed; inset: 0; z-index: 70; pointer-events: none; opacity: 0;
+    background:
+      radial-gradient(38rem 26rem at 50% 60%, rgba(198, 214, 230, 0.2), transparent 70%),
+      radial-gradient(26rem 20rem at 35% 45%, rgba(216, 179, 106, 0.14), transparent 70%),
+      rgba(7, 8, 11, 0.6);
+    backdrop-filter: blur(6px);
+  }
+  #smoke.puff { animation: puff 1.5s ease-out forwards; }
+  @keyframes puff {
+    0% { opacity: 0; transform: scale(1.14); }
+    22% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1); }
+  }
+  #scroll-panel[hidden] { display: none; }
+  #scroll-panel {
+    position: fixed; z-index: 80; inset: auto 0 clamp(1rem, 4vw, 2.5rem) 0;
+    margin: 0 auto; width: min(30rem, calc(100% - 2rem));
+    background: var(--sumi-2); border: 1px solid rgba(216, 179, 106, 0.4);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
+    padding: 1.6rem 1.7rem 1.5rem;
+  }
+  #scroll-panel .kj { font-family: var(--jp); font-size: 1.6rem; color: var(--gold); line-height: 1; }
+  #scroll-panel h2 { font-size: 1.2rem; font-weight: 600; margin: 0.6rem 0 0.6rem; }
+  #scroll-panel p { margin: 0; font-size: 0.95rem; color: var(--muted); }
+  #scroll-close {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    background: none; border: 0; color: var(--muted); cursor: pointer;
+    font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em;
+    padding: 0.5rem 0.7rem;
+  }
+  #scroll-close:hover { color: var(--gold); }
+
+  /* ---------- reveal on scroll ---------- */
+  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .js h1.hero-title .line > span,
+    .js .fade-up,
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+    .gilt, .shuriken, .avail::before { animation: none; }
+    .btn, article.project, .kit-col, .mark .star { transition: none; }
+    #smoke.puff { animation: none; }
+  }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  main:focus { outline: none; } /* skip-link target only — never a visible ring */
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- the trail: path is built from the layout at runtime -->
+<div id="trail-wrap" aria-hidden="true">
+  <svg id="trail-svg" preserveAspectRatio="none">
+    <path id="trail-ghost" d=""></path>
+    <path id="trail-path" d=""></path>
+    <g id="trail-nodes"></g>
+    <circle id="trail-head" r="3.4" cx="-99" cy="-99"></circle>
+  </svg>
+</div>
+
+<!-- shared defs: kumiko lattice, brush displacement, gold gradient, moonlight -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- kumiko: a triangular lattice tile (rows at h/2 = w * root3 / 2) -->
+    <pattern id="kumiko" width="40" height="69.282" patternUnits="userSpaceOnUse" patternTransform="scale(0.3)">
+      <path d="M0 0 H40 M0 34.641 H40 M0 69.282 H40 M0 0 L20 34.641 L0 69.282 M40 0 L20 34.641 L40 69.282"
+            fill="none" stroke="rgba(216,179,106,0.5)" stroke-width="3"/>
+    </pattern>
+    <filter id="brush">
+      <feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="15"/>
+    </filter>
+    <linearGradient id="goldgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9A7526"/>
+      <stop offset="0.5" stop-color="#F1DDA6"/>
+      <stop offset="1" stop-color="#9A7526"/>
+    </linearGradient>
+    <radialGradient id="moonlight">
+      <stop offset="0" stop-color="#DDE7F2" stop-opacity="0.16"/>
+      <stop offset="0.62" stop-color="#9FB4CC" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#7B8FA8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="lattice" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"/></svg></div>
+
+<header class="site">
+  <a class="mark" href="#top">
+    artur<em>.ninja</em>
+    <svg class="star" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 L19 13 L30 16 L19 19 L16 30 L13 19 L2 16 L13 13 Z"/></svg>
+  </a>
+  <nav class="site-nav" aria-label="Site">
+    <a href="#work">Work</a>
+    <a href="#kit">Kit</a>
+    <a href="#way">Way</a>
+    <a class="avail" href="#contact">Available Q4</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" id="top" data-trail="0.15" data-trail-x="0.80">
+  <canvas id="motes" aria-hidden="true"></canvas>
+
+  <svg class="crest" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <!-- moon -->
+    <circle cx="200" cy="200" r="150" fill="url(#moonlight)"/>
+    <!-- hand-brushed enso: the craft -->
+    <circle id="enso-ring" cx="200" cy="200" r="158"
+            stroke="url(#goldgrad)" stroke-width="8" fill="none"
+            filter="url(#brush)" transform="rotate(-76 200 200)" opacity="0.8"/>
+    <!-- precise shuriken crest: the cut -->
+    <g class="shuriken" opacity="0.85">
+      <path d="M200 74 L222 178 L326 200 L222 222 L200 326 L178 222 L74 200 L178 178 Z"
+            fill="none" stroke="#D8B36A" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="200" cy="200" r="13" fill="none" stroke="#D8B36A" stroke-width="1.4"/>
+    </g>
+  </svg>
+
+  <div class="wrap hero-inner">
+    <p class="eyebrow fade-up"><span class="kj" lang="ja" aria-hidden="true">忍</span>Full-Stack Software Developer</p>
+    <h1 class="hero-title" aria-label="Move unseen. Land precisely.">
+      <span class="line" aria-hidden="true"><span>Move unseen.</span></span>
+      <span class="line" aria-hidden="true"><span>Land</span></span>
+      <span class="line" aria-hidden="true"><span class="gilt">precisely.</span></span>
+    </h1>
+    <p class="lede fade-up">
+      Software announces itself when it fails — 3&nbsp;a.m. pages, mystery bugs, services
+      nobody dares touch. I build products <strong>end to end, one hand from database to
+      last pixel</strong>, and hand them over quiet enough to forget about.
+    </p>
+    <div class="cta-row fade-up later">
+      <a class="btn btn-solid" href="#work">Follow the trail</a>
+      <a class="btn btn-ghost" href="#contact">Send word</a>
+    </div>
+    <div class="hero-meta fade-up later">
+      <span>Based in S&atilde;o Paulo <span class="dot">&#9672;</span> working worldwide</span>
+      <span>Available Q4 2026 <span class="dot">&#9672;</span> two engagements open</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CRAFT ======================= -->
+<section class="block" aria-labelledby="craft-title" data-trail="0.4" data-trail-x="0.10">
+  <div class="wrap craft-grid">
+    <div class="reveal">
+      <p class="eyebrow"><span class="kj" lang="ja" aria-hidden="true">匠</span>The Craft</p>
+      <h2 class="section-title" id="craft-title">Built by one hand, <em>quiet by design</em>.</h2>
+      <p>
+        Most software fails at the seams — where the frontend team's assumptions meet the
+        backend team's reality. Working full-stack means there are no seams to fail:
+        <strong>the person shaping the API is the same person consuming it.</strong>
+      </p>
+      <p>
+        Eight years in, my work spans fintech platforms moving real money, developer tools
+        with demanding users, and consumer products where 200&nbsp;ms of delay is a design
+        flaw. Different domains, one standard: restraint everywhere, precision where it counts.
+      </p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><b><span data-count="8">0</span><sup>yrs</sup></b><span>In the field</span></div>
+      <div class="stat"><b><span data-count="23">0</span></b><span>Systems shipped end to end</span></div>
+      <div class="stat"><b><span data-count="99.98" data-decimals="2">0</span><sup>%</sup></b><span>Uptime across services I run</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CREED ======================= -->
+<section class="creed" aria-label="Working principles">
+  <div class="wrap creed-inner">
+    <div class="tenet">
+      <span class="kj" lang="ja" aria-hidden="true">影</span>
+      <span class="romaji">Kage &#183; Shadow</span>
+      <p>The best infrastructure is the kind nobody has to think about.</p>
+    </div>
+    <div class="tenet">
+      <span class="kj" lang="ja" aria-hidden="true">刃</span>
+      <span class="romaji">Yaiba &#183; Blade</span>
+      <p>One cut in the right place beats ten in the wrong ones.</p>
+    </div>
+    <div class="tenet">
+      <span class="kj" lang="ja" aria-hidden="true">型</span>
+      <span class="romaji">Kata &#183; Form</span>
+      <p>The same standard on line one and on line ten thousand.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WORK ======================= -->
+<section class="block" id="work" aria-labelledby="work-title" data-trail="0.5" data-trail-x="0.90">
+  <div class="wrap" style="position: relative;">
+    <span class="ghost-kanji" lang="ja" aria-hidden="true">任務</span>
+    <p class="eyebrow"><span class="kj" lang="ja" aria-hidden="true">任</span>Selected Work</p>
+    <h2 class="section-title" id="work-title">Three contracts, <em>closed clean</em>.</h2>
+    <p class="work-intro">Each ran from the first schema sketch to production monitoring — one continuous line of responsibility, with no handoffs for things to fall through.</p>
+
+    <div class="work-list">
+      <article class="project reveal">
+        <span class="proj-num" lang="ja" aria-hidden="true">壱</span>
+        <div class="year">2026</div>
+        <div>
+          <h3>Ledgerline — treasury automation</h3>
+          <p>
+            Multi-currency treasury platform for mid-size exporters. I built the double-entry
+            core, the reconciliation engine, and the dashboard the CFO actually opens every
+            morning. Idempotent by design: replaying a day of webhooks changes nothing.
+          </p>
+          <ul class="tags">
+            <li>TypeScript</li><li>Node.js</li><li>PostgreSQL</li><li>React</li><li>AWS</li>
+          </ul>
+        </div>
+        <div class="outcome"><b>R$ 340M</b><span>Reconciled per year</span></div>
+      </article>
+
+      <article class="project reveal">
+        <span class="proj-num" lang="ja" aria-hidden="true">弐</span>
+        <div class="year">2025</div>
+        <div>
+          <h3>Sawmill — CI insight for monorepos</h3>
+          <p>
+            Developer tool that traces flaky tests back to the commits that made them flaky.
+            A Go ingestion pipeline chewing through 40&nbsp;GB of test logs daily, a query
+            layer over ClickHouse, and a frontend where every chart answers exactly one question.
+          </p>
+          <ul class="tags">
+            <li>Go</li><li>ClickHouse</li><li>gRPC</li><li>Svelte</li><li>Kubernetes</li>
+          </ul>
+        </div>
+        <div class="outcome"><b>&minus;62%</b><span>Time lost to flaky tests</span></div>
+      </article>
+
+      <article class="project reveal">
+        <span class="proj-num" lang="ja" aria-hidden="true">参</span>
+        <div class="year">2024</div>
+        <div>
+          <h3>Marchetaria — commerce for makers</h3>
+          <p>
+            Storefront and workshop-management suite for independent furniture makers.
+            Inventory, commissions and payments in one system that a two-person workshop
+            can run without a manual.
+          </p>
+          <ul class="tags">
+            <li>Next.js</li><li>tRPC</li><li>PostgreSQL</li><li>Stripe</li><li>Redis</li>
+          </ul>
+        </div>
+        <div class="outcome"><b>1,900+</b><span>Workshops on the platform</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= THE KIT ======================= -->
+<section class="block" id="kit" aria-labelledby="kit-title" data-trail="0.5" data-trail-x="0.08">
+  <div class="wrap" style="position: relative;">
+    <span class="ghost-kanji" lang="ja" aria-hidden="true">道具</span>
+    <p class="eyebrow"><span class="kj" lang="ja" aria-hidden="true">具</span>The Kit</p>
+    <h2 class="section-title" id="kit-title">Few tools, <em>kept sharp</em>.</h2>
+
+    <div class="kit-grid">
+      <div class="kit-col reveal">
+        <div class="lattice" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"/></svg></div>
+        <span class="kj" lang="ja" aria-hidden="true">表</span>
+        <h3>The surface</h3>
+        <p class="role">What people touch</p>
+        <ul>
+          <li>TypeScript</li>
+          <li>React &amp; Next.js</li>
+          <li>Svelte</li>
+          <li>CSS, hand-cut</li>
+          <li>WebGL &amp; Canvas</li>
+          <li>Accessibility as a spec, not a pass</li>
+        </ul>
+      </div>
+      <div class="kit-col reveal">
+        <div class="lattice" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"/></svg></div>
+        <span class="kj" lang="ja" aria-hidden="true">裏</span>
+        <h3>The weight</h3>
+        <p class="role">What holds it up</p>
+        <ul>
+          <li>Node.js &amp; Go</li>
+          <li>PostgreSQL &amp; Redis</li>
+          <li>ClickHouse</li>
+          <li>REST, gRPC &amp; GraphQL</li>
+          <li>Event-driven queues</li>
+          <li>Auth that survives an audit</li>
+        </ul>
+      </div>
+      <div class="kit-col reveal">
+        <div class="lattice" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"/></svg></div>
+        <span class="kj" lang="ja" aria-hidden="true">守</span>
+        <h3>The watch</h3>
+        <p class="role">What keeps it standing</p>
+        <ul>
+          <li>Docker &amp; Kubernetes</li>
+          <li>Terraform on AWS</li>
+          <li>GitHub Actions</li>
+          <li>Grafana &amp; OpenTelemetry</li>
+          <li>Load testing before launch day</li>
+          <li>Docs written for the next dev</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= THE WAY ======================= -->
+<section class="block" id="way" aria-labelledby="way-title" data-trail="0.5" data-trail-x="0.88">
+  <div class="wrap" style="position: relative;">
+    <span class="ghost-kanji" lang="ja" aria-hidden="true">道</span>
+    <p class="eyebrow"><span class="kj" lang="ja" aria-hidden="true">道</span>The Way</p>
+    <h2 class="section-title" id="way-title">Scout. Plan. Strike. <em>Vanish.</em></h2>
+
+    <div class="way">
+      <div class="step reveal">
+        <span class="kj" lang="ja" aria-hidden="true">見</span>
+        <h3>Scout</h3>
+        <p>A short discovery sprint: the real constraint, the real user, the real deadline. You get a written plan with costs before any code exists.</p>
+      </div>
+      <div class="step reveal">
+        <span class="kj" lang="ja" aria-hidden="true">計</span>
+        <h3>Plan</h3>
+        <p>Schema, API contracts and infrastructure sketched together, so the parts are designed to fit instead of forced to.</p>
+      </div>
+      <div class="step reveal">
+        <span class="kj" lang="ja" aria-hidden="true">打</span>
+        <h3>Strike</h3>
+        <p>Weekly working software, not weekly slide decks. You click a staging URL every Friday, from week one.</p>
+      </div>
+      <div class="step reveal">
+        <span class="kj" lang="ja" aria-hidden="true">消</span>
+        <h3>Vanish</h3>
+        <p>Load tests, monitoring, and a handover your team can actually run with. Then I disappear — and stay reachable through the first month of weather.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= QUOTE ======================= -->
+<section class="block" aria-label="Client reference" data-trail="0.5" data-trail-x="0.50">
+  <div class="wrap">
+    <figure class="quote reveal">
+      <blockquote>
+        Artur is the only engineer we've worked with who argued <em>against</em> building
+        something we asked for — and was right. The system he did build hasn't paged
+        anyone in fourteen months.
+      </blockquote>
+      <figcaption>Marina Duarte &#9672; CTO, Ledgerline</figcaption>
+    </figure>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= CONTACT ======================= -->
+<footer class="contact" id="contact" data-trail="0.55" data-trail-x="0.14">
+  <div class="wrap contact-inner">
+    <p class="eyebrow"><span class="kj" lang="ja" aria-hidden="true">縁</span>Commissions</p>
+    <h2 class="reveal">Have something worth <em class="gilt">building quietly?</em></h2>
+    <p class="pitch reveal">
+      I take on two or three product engagements a year — enough to give each one undivided
+      attention. Tell me what you're making and I'll reply within two working days with an
+      honest read on fit, scope and timing.
+    </p>
+    <p class="reveal"><a class="email-link" href="mailto:adamsartur@gmail.com">adamsartur@gmail.com</a></p>
+
+    <div class="footer-base">
+      <span>&copy; 2026 Artur Adams &#9672; artur.ninja</span>
+      <div class="footer-links">
+        <a href="https://github.com/arturadams" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/arturadams" rel="noopener">LinkedIn</a>
+        <a href="mailto:adamsartur@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="lattice" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#kumiko)"/></svg></div>
+
+<div id="smoke" aria-hidden="true"></div>
+<div id="scroll-panel" role="dialog" aria-modal="false" aria-labelledby="scroll-title" hidden>
+  <button id="scroll-close" type="button" aria-label="Close">ESC &times;</button>
+  <span class="kj" lang="ja" aria-hidden="true">巻物</span>
+  <h2 id="scroll-title">You found the hidden scroll.</h2>
+  <p>
+    Most visitors never type a thing. Since you did: there is no secret technique —
+    only short feedback loops and a refusal to ship what I don't understand.
+    Mention the shuriken when you write.
+  </p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- entrance ---------- */
+  function markLoaded() { root.classList.add("loaded"); }
+  window.addEventListener("load", function () { setTimeout(markLoaded, 80); });
+  setTimeout(markLoaded, 2500); // safety: reveal even if `load` never fires
+
+  /* ---------- the enso draws itself ---------- */
+  var ring = document.getElementById("enso-ring");
+  if (ring) {
+    var C = 2 * Math.PI * 158;
+    var visible = C * 0.93; // the enso stays open
+    ring.style.strokeDasharray = visible + " " + C;
+    if (reduced) {
+      ring.style.strokeDashoffset = 0;
+    } else {
+      ring.style.strokeDashoffset = visible;
+      ring.style.transition = "stroke-dashoffset 2s cubic-bezier(0.5, 0, 0.2, 1) 0.3s";
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { ring.style.strokeDashoffset = 0; });
+      });
+    }
+  }
+
+  /* ---------- scroll reveals ---------- */
+  var items = document.querySelectorAll(".reveal");
+  if (reduced || !("IntersectionObserver" in window)) {
+    items.forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+    items.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- stat count-up ---------- */
+  var counters = document.querySelectorAll("[data-count]");
+  function runCounter(el) {
+    var target = parseFloat(el.dataset.count);
+    var decimals = parseInt(el.dataset.decimals || "0", 10);
+    var t0 = performance.now(), dur = 1600;
+    function tick(t) {
+      var p = Math.min((t - t0) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (target * eased).toFixed(decimals);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toFixed(decimals);
+    }
+    requestAnimationFrame(tick);
+  }
+  if (reduced || !("IntersectionObserver" in window)) {
+    counters.forEach(function (el) {
+      el.textContent = parseFloat(el.dataset.count).toFixed(parseInt(el.dataset.decimals || "0", 10));
+    });
+  } else {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { runCounter(e.target); cio.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* ---------- motes drifting in moonlight (hero canvas) ---------- */
+  var canvas = document.getElementById("motes");
+  if (canvas && !reduced) {
+    var ctx = canvas.getContext("2d");
+    var hero = canvas.parentElement;
+    var W = 0, H = 0, motes = [], running = false;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function sizeMotes() {
+      W = hero.offsetWidth; H = hero.offsetHeight;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      motes = [];
+      var n = Math.min(70, Math.floor(W / 18));
+      for (var i = 0; i < n; i++) {
+        motes.push({
+          x: Math.random() * W, y: Math.random() * H,
+          r: 0.4 + Math.random() * 1.3,
+          vy: -(0.06 + Math.random() * 0.24),
+          vx: (Math.random() - 0.5) * 0.1,
+          ph: Math.random() * Math.PI * 2,
+          sp: 0.008 + Math.random() * 0.018,
+          gold: Math.random() < 0.35
+        });
+      }
+    }
+    function drawMotes() {
+      if (!running) return;
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < motes.length; i++) {
+        var m = motes[i];
+        m.y += m.vy; m.x += m.vx; m.ph += m.sp;
+        if (m.y < -4) { m.y = H + 4; m.x = Math.random() * W; }
+        if (m.x < -4) m.x = W + 4; else if (m.x > W + 4) m.x = -4;
+        var a = (0.18 + 0.45 * (0.5 + 0.5 * Math.sin(m.ph))).toFixed(3);
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, 6.2832);
+        ctx.fillStyle = m.gold ? "rgba(216,179,106," + a + ")" : "rgba(198,214,230," + a + ")";
+        ctx.fill();
+      }
+      requestAnimationFrame(drawMotes);
+    }
+
+    sizeMotes();
+    if ("IntersectionObserver" in window) {
+      // don't burn frames on a hero that's scrolled off screen
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting;
+        if (visible && !running) { running = true; drawMotes(); }
+        else if (!visible) { running = false; }
+      }).observe(hero);
+    } else {
+      running = true; drawMotes();
+    }
+    window.addEventListener("resize", sizeMotes);
+  }
+
+  /* ---------- the trail: a line drawn down the page as you scroll ---------- */
+  var svg = document.getElementById("trail-svg");
+  var path = document.getElementById("trail-path");
+  var ghost = document.getElementById("trail-ghost");
+  var nodesG = document.getElementById("trail-nodes");
+  var head = document.getElementById("trail-head");
+  var pathLen = 0, nodeFracs = [], nodeEls = [];
+
+  function diamond(x, y, r) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    el.setAttribute("d", "M" + x + " " + (y - r) + "L" + (x + r) + " " + y + "L" + x + " " + (y + r) + "L" + (x - r) + " " + y + "Z");
+    el.setAttribute("class", "trail-node");
+    return el;
+  }
+
+  function buildTrail() {
+    var docH = root.scrollHeight;
+    var w = root.clientWidth;
+    svg.setAttribute("viewBox", "0 0 " + w + " " + docH);
+    svg.setAttribute("width", w);
+    svg.setAttribute("height", docH);
+
+    var pts = [];
+    document.querySelectorAll("[data-trail]").forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      pts.push([
+        w * parseFloat(el.dataset.trailX || "0.5"),
+        r.top + window.scrollY + r.height * parseFloat(el.dataset.trail || "0.5")
+      ]);
+    });
+    if (pts.length < 2) return;
+    pts.unshift([w * 0.62, 0]);
+    pts.push([w * 0.5, docH]);
+
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    for (var i = 1; i < pts.length; i++) {
+      var x0 = pts[i - 1][0], y0 = pts[i - 1][1];
+      var x1 = pts[i][0], y1 = pts[i][1];
+      var my = (y0 + y1) / 2;
+      d += " C " + x0 + " " + my + ", " + x1 + " " + my + ", " + x1 + " " + y1;
+    }
+    path.setAttribute("d", d);
+    ghost.setAttribute("d", d);
+    pathLen = path.getTotalLength();
+    path.style.strokeDasharray = pathLen;
+
+    // a marker at each waypoint, lit as the trail passes it
+    nodesG.textContent = "";
+    nodeFracs = []; nodeEls = [];
+    var samples = 260, sampled = [];
+    for (var s = 0; s <= samples; s++) sampled.push(path.getPointAtLength((pathLen * s) / samples));
+    for (var p = 1; p < pts.length - 1; p++) {
+      var best = 0, bestD = Infinity;
+      for (var k = 0; k <= samples; k++) {
+        var dx = sampled[k].x - pts[p][0], dy = sampled[k].y - pts[p][1];
+        var dist = dx * dx + dy * dy;
+        if (dist < bestD) { bestD = dist; best = k; }
+      }
+      var node = diamond(pts[p][0], pts[p][1], 4.5);
+      nodesG.appendChild(node);
+      nodeFracs.push(best / samples);
+      nodeEls.push(node);
+    }
+    updateTrail(true);
+  }
+
+  var progress = 0;
+  function targetProgress() {
+    var reach = (window.scrollY + window.innerHeight * 0.75) / root.scrollHeight;
+    return Math.min(Math.max(reach, 0.04), 1);
+  }
+  function updateTrail(instant) {
+    if (!pathLen) return;
+    var t = reduced ? 1 : targetProgress();
+    progress = (instant || reduced) ? t : progress + (t - progress) * 0.1;
+    path.style.strokeDashoffset = pathLen * (1 - progress);
+    for (var i = 0; i < nodeEls.length; i++) {
+      nodeEls[i].classList.toggle("lit", progress >= nodeFracs[i]);
+    }
+    // the glint travelling at the head of the trail
+    if (!reduced) {
+      var pt = path.getPointAtLength(pathLen * progress);
+      head.setAttribute("cx", pt.x);
+      head.setAttribute("cy", pt.y);
+      head.style.opacity = progress > 0.995 ? "0" : "1";
+    }
+  }
+  function trailLoop() {
+    updateTrail(false);
+    requestAnimationFrame(trailLoop);
+  }
+
+  window.addEventListener("load", function () {
+    buildTrail();
+    if (reduced) {
+      path.style.strokeDashoffset = 0;
+      nodeEls.forEach(function (n) { n.classList.add("lit"); });
+    } else {
+      trailLoop();
+    }
+  });
+
+  var resizeTimer;
+  function scheduleRebuild() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildTrail, 200);
+  }
+  window.addEventListener("resize", scheduleRebuild);
+  // late layout shifts (font swap, image decode) change the document height
+  if ("ResizeObserver" in window) new ResizeObserver(scheduleRebuild).observe(document.body);
+
+  /* ---------- hidden scroll: type "ninja" ---------- */
+  var panel = document.getElementById("scroll-panel");
+  var closeBtn = document.getElementById("scroll-close");
+  var smoke = document.getElementById("smoke");
+  var typed = "";
+  var lastFocus = null;
+
+  function openScroll() {
+    if (!panel.hidden) return;
+    lastFocus = document.activeElement;
+    if (!reduced) {
+      smoke.classList.remove("puff");
+      void smoke.offsetWidth; // restart the animation
+      smoke.classList.add("puff");
+    }
+    panel.hidden = false;
+    closeBtn.focus();
+  }
+  function closeScroll() {
+    if (panel.hidden) return;
+    panel.hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  closeBtn.addEventListener("click", closeScroll);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { closeScroll(); return; }
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+    if (e.key.length !== 1 || e.metaKey || e.ctrlKey || e.altKey) return;
+    typed = (typed + e.key.toLowerCase()).slice(-5);
+    if (typed === "ninja") { typed = ""; openScroll(); }
+  });
+})();
+</script>
+</body>
+</html>

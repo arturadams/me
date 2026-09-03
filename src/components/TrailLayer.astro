@@ -1,0 +1,69 @@
+---
+// The scroll-drawn line running the height of the document. The path is built
+// at runtime from every [data-trail] element on the page.
+---
+
+<div id="trail-wrap" aria-hidden="true">
+  <svg id="trail-svg" preserveAspectRatio="none">
+    <path id="trail-ghost" d=""></path>
+    <path id="trail-path" d=""></path>
+    <g id="trail-nodes"></g>
+    <circle id="trail-head" r="3.4" cx="-99" cy="-99"></circle>
+  </svg>
+</div>
+
+<style is:global>
+  /* Global: the nodes are created by script, so scoping hashes can't reach them. */
+  #trail-wrap {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  #trail-svg {
+    display: block;
+    width: 100%;
+  }
+  #trail-path {
+    stroke: var(--color-gold);
+    stroke-width: 1.4;
+    fill: none;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 7px rgba(216, 179, 106, 0.5));
+    opacity: 0.8;
+  }
+  #trail-ghost {
+    stroke: rgba(236, 234, 225, 0.07);
+    stroke-width: 1;
+    fill: none;
+    stroke-dasharray: 2 7;
+    vector-effect: non-scaling-stroke;
+  }
+  #trail-head {
+    fill: var(--color-blade);
+    filter: drop-shadow(0 0 9px rgba(198, 214, 230, 0.9));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .trail-node {
+    fill: #171b24;
+    stroke: rgba(216, 179, 106, 0.3);
+    stroke-width: 1;
+    transition:
+      fill 0.6s ease,
+      stroke 0.6s ease;
+  }
+  .trail-node.lit {
+    fill: var(--color-gold);
+    stroke: var(--color-gold-pale);
+    filter: drop-shadow(0 0 6px rgba(216, 179, 106, 0.75));
+  }
+</style>
+
+<script>
+  import { initTrail } from "../scripts/trail";
+  initTrail();
+</script>

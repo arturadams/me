@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import Eyebrow from "./Eyebrow.astro";
+import ProjectRow from "./ProjectRow.astro";
+import Section from "./Section.astro";
+import SectionTitle from "./SectionTitle.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Section id="work" ghost="任務" trail={0.5} trailX={0.9} labelledby="work-title">
+  <Eyebrow kanji="任" label="Selected Work" />
+  <SectionTitle id="work-title">Three contracts, <em>closed clean</em>.</SectionTitle>
+  <p class="work-intro">
+    Each ran from the first schema sketch to production monitoring — one continuous line of
+    responsibility, with no handoffs for things to fall through.
+  </p>
+
+  <div class="work-list">
+    {projects.map((project) => <ProjectRow project={project} />)}
+  </div>
+</Section>
+
+<style>
+  .work-intro {
+    margin: 0 0 3rem;
+    max-width: 36rem;
+    color: var(--color-muted);
+  }
+</style>

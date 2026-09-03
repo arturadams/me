@@ -1,0 +1,96 @@
+---
+import { tenets } from "../data/tenets";
+---
+
+<section class="creed" aria-label="Working principles">
+  <div class="wrap creed-inner">
+    {
+      tenets.map((tenet) => (
+        <div class="tenet">
+          <span class="kj" lang="ja" aria-hidden="true">
+            {tenet.kanji}
+          </span>
+          <span class="romaji">
+            {tenet.romaji} &#183; {tenet.gloss}
+          </span>
+          <p>{tenet.line}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .creed {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    background-color: rgba(236, 234, 225, 0.014);
+  }
+
+  /* kumiko lattice in pure CSS — the band costs no extra request */
+  .creed::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image:
+      repeating-linear-gradient(60deg, rgba(216, 179, 106, 0.07) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(-60deg, rgba(216, 179, 106, 0.07) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(0deg, rgba(216, 179, 106, 0.05) 0 1px, transparent 1px 26px);
+    mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  }
+
+  .creed-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .tenet {
+    padding: clamp(2.2rem, 4.5vw, 3.4rem) clamp(1.4rem, 3vw, 2.6rem);
+    border-left: 1px solid var(--color-line);
+  }
+  .tenet:first-child {
+    border-left: 0;
+  }
+
+  @media (max-width: 52rem) {
+    .creed-inner {
+      grid-template-columns: 1fr;
+    }
+    .tenet {
+      border-left: 0;
+      border-top: 1px solid var(--color-line);
+    }
+    .tenet:first-child {
+      border-top: 0;
+    }
+  }
+
+  .kj {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-family: var(--font-jp);
+    font-size: 2.9rem;
+    line-height: 1;
+    color: var(--color-gold);
+    text-shadow: 0 0 26px rgba(216, 179, 106, 0.25);
+  }
+  .romaji {
+    display: block;
+    margin-bottom: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .tenet p {
+    margin: 0;
+    max-width: 26ch;
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+</style>

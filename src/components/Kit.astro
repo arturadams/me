@@ -1,0 +1,110 @@
+---
+import { kit } from "../data/kit";
+import Eyebrow from "./Eyebrow.astro";
+import Lattice from "./Lattice.astro";
+import Section from "./Section.astro";
+import SectionTitle from "./SectionTitle.astro";
+---
+
+<Section id="kit" ghost="道具" trail={0.5} trailX={0.08} labelledby="kit-title">
+  <Eyebrow kanji="具" label="The Kit" />
+  <SectionTitle id="kit-title">Few tools, <em>kept sharp</em>.</SectionTitle>
+
+  <div class="kit-grid">
+    {
+      kit.map((column) => (
+        <div class="kit-col reveal">
+          <Lattice />
+          <span class="kj" lang="ja" aria-hidden="true">
+            {column.kanji}
+          </span>
+          <h3>{column.title}</h3>
+          <p class="role">{column.role}</p>
+          <ul>
+            {column.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .kit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin-top: 3rem;
+  }
+  @media (max-width: 52rem) {
+    .kit-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .kit-col {
+    padding: 0 1.6rem 1.8rem;
+    background: rgba(236, 234, 225, 0.022);
+    border: 1px solid var(--color-line);
+    transition:
+      border-color 0.3s ease,
+      transform 0.3s ease,
+      background 0.3s ease;
+  }
+  .kit-col:hover {
+    border-color: rgba(216, 179, 106, 0.4);
+    transform: translateY(-4px);
+    background: rgba(236, 234, 225, 0.035);
+  }
+  /* pull the lattice band out to the card edges */
+  .kit-col :global(.lattice) {
+    margin: 0 -1.6rem 1.5rem;
+  }
+
+  .kj {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-jp);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--color-gold);
+  }
+  h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .role {
+    margin: 0 0 1.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  ul {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    list-style: none;
+    font-size: 0.98rem;
+    color: var(--color-muted);
+  }
+  li::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--color-gold);
+    transform: rotate(45deg) translateY(-1px);
+  }
+</style>

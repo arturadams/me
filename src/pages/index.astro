@@ -1,0 +1,28 @@
+---
+import Contact from "../components/Contact.astro";
+import Craft from "../components/Craft.astro";
+import Creed from "../components/Creed.astro";
+import Hero from "../components/Hero.astro";
+import Kit from "../components/Kit.astro";
+import Quote from "../components/Quote.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Way from "../components/Way.astro";
+import Work from "../components/Work.astro";
+import Base from "../layouts/Base.astro";
+---
+
+<Base>
+  <SiteHeader />
+
+  <main id="main" tabindex="-1" class="relative z-[1]">
+    <Hero />
+    <Craft />
+    <Creed />
+    <Work />
+    <Kit />
+    <Way />
+    <Quote />
+  </main>
+
+  <Contact />
+</Base>

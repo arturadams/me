@@ -1,0 +1,96 @@
+---
+import { nav, site } from "../data/site";
+
+const [handle, tld] = site.domain.replace(/^www\./, "").split(".");
+---
+
+<header
+  class="site relative z-[1] mx-auto flex max-w-[74rem] items-center justify-between gap-4 px-[clamp(1.25rem,4vw,3rem)] py-[1.6rem]"
+>
+  <a class="mark" href="#top">
+    {handle}<em>.{tld}</em>
+    <svg class="star" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 2 L19 13 L30 16 L19 19 L16 30 L13 19 L2 16 L13 13 Z"></path>
+    </svg>
+  </a>
+
+  <nav class="site-nav" aria-label="Site">
+    {nav.map((link) => <a href={link.href}>{link.label}</a>)}
+    <a class="avail" href="#contact">Available {site.availability.split(" ")[0]}</a>
+  </nav>
+</header>
+
+<style>
+  .mark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .mark em {
+    font-style: normal;
+    color: var(--color-gold);
+  }
+  .star {
+    display: inline-block;
+    width: 0.62em;
+    height: 0.62em;
+    margin-left: 0.45rem;
+    align-self: center;
+    fill: var(--color-gold);
+    transition: transform 0.7s var(--ease-out-expo);
+  }
+  .mark:hover .star,
+  .mark:focus-visible .star {
+    transform: rotate(180deg);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .site-nav a {
+    padding-bottom: 2px;
+    color: var(--color-muted);
+    text-decoration: none;
+    background: linear-gradient(var(--color-gold), var(--color-gold)) no-repeat left bottom / 0 1px;
+    transition:
+      background-size 0.25s ease,
+      color 0.25s ease;
+  }
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    color: var(--color-paper);
+    background-size: 100% 1px;
+  }
+
+  .avail {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gold);
+  }
+  .avail::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    box-shadow: 0 0 8px var(--color-gold);
+    animation: var(--animate-pulse-dot);
+  }
+
+  @media (max-width: 46rem) {
+    .site-nav a:not(.avail) {
+      display: none;
+    }
+  }
+</style>

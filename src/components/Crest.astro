@@ -1,0 +1,59 @@
+---
+// Moon, a hand-brushed enso, and a precise shuriken crest turning inside it.
+// The tension between the brushed circle and the exact blade is the point.
+---
+
+<svg class="crest" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+  <circle cx="200" cy="200" r="150" fill="url(#moonlight)"></circle>
+
+  <circle
+    id="enso-ring"
+    cx="200"
+    cy="200"
+    r="158"
+    stroke="url(#goldgrad)"
+    stroke-width="8"
+    fill="none"
+    filter="url(#brush)"
+    transform="rotate(-76 200 200)"
+    opacity="0.8"></circle>
+
+  <g class="shuriken" opacity="0.85">
+    <path
+      d="M200 74 L222 178 L326 200 L222 222 L200 326 L178 222 L74 200 L178 178 Z"
+      fill="none"
+      stroke="#D8B36A"
+      stroke-width="1.4"
+      stroke-linejoin="round"></path>
+    <circle cx="200" cy="200" r="13" fill="none" stroke="#D8B36A" stroke-width="1.4"></circle>
+  </g>
+</svg>
+
+<style>
+  .crest {
+    position: absolute;
+    z-index: 1;
+    top: clamp(0rem, 4vw, 3rem);
+    right: clamp(-8rem, 0vw, 6rem);
+    width: clamp(18rem, 40vw, 33rem);
+    height: clamp(18rem, 40vw, 33rem);
+  }
+  .shuriken {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: var(--animate-spin-slow);
+  }
+  @media (max-width: 52rem) {
+    .crest {
+      top: auto;
+      bottom: -9rem;
+      right: -7rem;
+      opacity: 0.45;
+    }
+  }
+</style>
+
+<script>
+  import { initEnso } from "../scripts/enso";
+  initEnso();
+</script>

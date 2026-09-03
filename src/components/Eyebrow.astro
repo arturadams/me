@@ -1,0 +1,46 @@
+---
+interface Props {
+  /** Decorative seal. Rendered aria-hidden with lang="ja". */
+  kanji: string;
+  label: string;
+  class?: string;
+}
+
+const { kanji, label, class: className } = Astro.props;
+---
+
+<p class:list={["eyebrow", className]}>
+  <span class="kj" lang="ja" aria-hidden="true">{kanji}</span>{label}
+</p>
+
+<style>
+  /* Seal, then rule, then label. The label is an anonymous flex item, so it
+     has order 0 and lands last without needing a wrapper element. */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .eyebrow::after {
+    content: "";
+    order: -1;
+    flex: none;
+    width: 2.6rem;
+    height: 1px;
+    background: var(--color-gold);
+  }
+  .kj {
+    order: -2;
+    font-family: var(--font-jp);
+    font-size: 1.15rem;
+    letter-spacing: 0;
+    line-height: 1;
+    color: var(--color-gold);
+  }
+</style>

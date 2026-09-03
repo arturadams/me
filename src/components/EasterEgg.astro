@@ -1,0 +1,99 @@
+---
+// Type "ninja" anywhere on the page.
+---
+
+<div id="smoke" aria-hidden="true"></div>
+
+<div id="scroll-panel" role="dialog" aria-modal="false" aria-labelledby="scroll-title" hidden>
+  <button id="scroll-close" type="button" aria-label="Close">ESC &times;</button>
+  <span class="kj" lang="ja" aria-hidden="true">巻物</span>
+  <h2 id="scroll-title">You found the hidden scroll.</h2>
+  <p>
+    Most visitors never type a thing. Since you did: there is no secret technique — only short
+    feedback loops and a refusal to ship what I don't understand. Mention the shuriken when you
+    write.
+  </p>
+</div>
+
+<style>
+  #smoke {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      radial-gradient(38rem 26rem at 50% 60%, rgba(198, 214, 230, 0.2), transparent 70%),
+      radial-gradient(26rem 20rem at 35% 45%, rgba(216, 179, 106, 0.14), transparent 70%),
+      rgba(7, 8, 11, 0.6);
+    backdrop-filter: blur(6px);
+  }
+  #smoke.puff {
+    animation: puff 1.5s ease-out forwards;
+  }
+  @keyframes puff {
+    0% {
+      opacity: 0;
+      transform: scale(1.14);
+    }
+    22% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  #scroll-panel[hidden] {
+    display: none;
+  }
+  #scroll-panel {
+    position: fixed;
+    z-index: 80;
+    inset: auto 0 clamp(1rem, 4vw, 2.5rem) 0;
+    margin-inline: auto;
+    width: min(30rem, calc(100% - 2rem));
+    background: var(--color-sumi-2);
+    border: 1px solid rgba(216, 179, 106, 0.4);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
+    padding: 1.6rem 1.7rem 1.5rem;
+  }
+  #scroll-panel .kj {
+    font-family: var(--font-jp);
+    font-size: 1.6rem;
+    color: var(--color-gold);
+    line-height: 1;
+  }
+  #scroll-panel h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0.6rem 0;
+  }
+  #scroll-panel p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+  #scroll-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: 0;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.7rem;
+  }
+  #scroll-close:hover {
+    color: var(--color-gold);
+  }
+</style>
+
+<script>
+  import { initEasterEgg } from "../scripts/easter-egg";
+  initEasterEgg();
+</script>

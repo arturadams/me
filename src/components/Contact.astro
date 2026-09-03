@@ -1,0 +1,97 @@
+---
+import { site } from "../data/site";
+import Eyebrow from "./Eyebrow.astro";
+---
+
+<footer class="contact relative z-[1]" id="contact" data-trail="0.55" data-trail-x="0.14">
+  <div class="wrap contact-inner">
+    <Eyebrow kanji="縁" label="Commissions" />
+
+    <h2 class="reveal">Have something worth <em class="gilt">building quietly?</em></h2>
+
+    <p class="pitch reveal">
+      I take on two or three product engagements a year — enough to give each one undivided
+      attention. Tell me what you're making and I'll reply within two working days with an honest
+      read on fit, scope and timing.
+    </p>
+
+    <p class="reveal">
+      <a class="email-link" href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+
+    <div class="footer-base">
+      <span>&copy; {new Date().getFullYear()} {site.name} &#9672; {site.domain.replace(/^www\./, "")}</span>
+      <div class="footer-links">
+        <a href={site.social.github} rel="noopener">GitHub</a>
+        <a href={site.social.linkedin} rel="noopener">LinkedIn</a>
+        <a href={`mailto:${site.email}`}>Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    border-top: 1px solid var(--color-line);
+  }
+  .contact-inner {
+    position: relative;
+    padding: clamp(5rem, 11vw, 9rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  h2 {
+    margin: 0 0 1.6rem;
+    max-width: 16ch;
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+  .pitch {
+    margin: 0 0 2.6rem;
+    max-width: 35rem;
+    color: var(--color-muted);
+  }
+
+  .email-link {
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 2.4vw, 1.35rem);
+    color: var(--color-paper);
+    text-decoration: none;
+    border-bottom: 2px solid var(--color-gold);
+    padding-bottom: 0.25rem;
+    transition: color 0.2s ease;
+  }
+  .email-link:hover,
+  .email-link:focus-visible {
+    color: var(--color-gold);
+  }
+
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem 2rem;
+    margin-top: clamp(3.5rem, 8vw, 5.5rem);
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .footer-base a {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .footer-base a:hover,
+  .footer-base a:focus-visible {
+    color: var(--color-gold);
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.6rem;
+  }
+</style>

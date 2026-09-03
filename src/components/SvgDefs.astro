@@ -1,0 +1,45 @@
+---
+// Shared SVG paint servers and filters. Rendered once, referenced by url(#id).
+---
+
+<svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- kumiko: a triangular lattice tile (rows at w * root3 / 2) -->
+    <pattern
+      id="kumiko"
+      width="40"
+      height="69.282"
+      patternUnits="userSpaceOnUse"
+      patternTransform="scale(0.3)"
+    >
+      <path
+        d="M0 0 H40 M0 34.641 H40 M0 69.282 H40 M0 0 L20 34.641 L0 69.282 M40 0 L20 34.641 L40 69.282"
+        fill="none"
+        stroke="rgba(216,179,106,0.5)"
+        stroke-width="3"></path>
+    </pattern>
+
+    <!-- displaces a stroke into something that reads as a brush mark -->
+    <filter id="brush">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.024"
+        numOctaves="3"
+        seed="4"
+        result="noise"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="15"></feDisplacementMap>
+    </filter>
+
+    <linearGradient id="goldgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9A7526"></stop>
+      <stop offset="0.5" stop-color="#F1DDA6"></stop>
+      <stop offset="1" stop-color="#9A7526"></stop>
+    </linearGradient>
+
+    <radialGradient id="moonlight">
+      <stop offset="0" stop-color="#DDE7F2" stop-opacity="0.16"></stop>
+      <stop offset="0.62" stop-color="#9FB4CC" stop-opacity="0.07"></stop>
+      <stop offset="1" stop-color="#7B8FA8" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+</svg>

@@ -1,0 +1,149 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<article class="project reveal">
+  <span class="proj-num" lang="ja" aria-hidden="true">{data.numeral}</span>
+
+  <div class="year">{data.year}</div>
+
+  <div>
+    <h3>{data.title}</h3>
+    <div class="body"><Content /></div>
+    <ul class="tags">
+      {data.tags.map((tag) => <li>{tag}</li>)}
+    </ul>
+  </div>
+
+  <div class="outcome">
+    <b>{data.outcome.value}</b>
+    <span>{data.outcome.label}</span>
+  </div>
+</article>
+
+<style>
+  .project {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr) minmax(0, 14rem);
+    gap: 1rem 2.5rem;
+    padding: 2.4rem 1rem;
+    overflow: hidden;
+    border-top: 1px solid var(--color-line);
+    transition:
+      padding-left 0.35s ease,
+      background 0.35s ease;
+  }
+  .project:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* a line drawn across the top edge on hover */
+  .project::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    height: 1px;
+    width: 0;
+    background: linear-gradient(90deg, var(--color-gold), transparent);
+    transition: width 0.55s ease;
+  }
+  .project:hover {
+    padding-left: 1.6rem;
+    background: rgba(216, 179, 106, 0.03);
+  }
+  .project:hover::before {
+    width: 100%;
+  }
+
+  @media (max-width: 52rem) {
+    .project {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+  }
+
+  .proj-num {
+    position: absolute;
+    right: 0;
+    bottom: -1.8rem;
+    font-family: var(--font-jp);
+    font-size: 8.5rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(216, 179, 106, 0);
+    pointer-events: none;
+    user-select: none;
+    transition:
+      -webkit-text-stroke-color 0.5s ease,
+      transform 0.5s ease;
+  }
+  .project:hover .proj-num {
+    -webkit-text-stroke-color: rgba(216, 179, 106, 0.2);
+    transform: translateY(-6px);
+  }
+
+  .year {
+    padding-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: var(--color-gold);
+  }
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.55rem;
+    font-weight: 600;
+  }
+  .body :global(p) {
+    margin: 0;
+    max-width: 54ch;
+    color: var(--color-muted);
+  }
+
+  .outcome {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+  }
+  .outcome b {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-gold);
+  }
+  .outcome span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+  }
+  .tags li {
+    list-style: none;
+    padding: 0.26rem 0.6rem;
+    border: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+</style>

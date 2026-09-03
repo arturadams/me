@@ -1,0 +1,180 @@
+---
+import { site } from "../data/site";
+import Crest from "./Crest.astro";
+import Eyebrow from "./Eyebrow.astro";
+
+const lines = ["Move unseen.", "Land", "precisely."];
+---
+
+<section class="hero relative overflow-hidden" id="top" data-trail="0.15" data-trail-x="0.80">
+  <canvas id="motes" class="pointer-events-none absolute inset-0 z-0 h-full w-full" aria-hidden="true"
+  ></canvas>
+
+  <Crest />
+
+  <div class="wrap relative z-[2] pt-[clamp(4rem,11vw,9rem)] pb-[clamp(5rem,11vw,8rem)]">
+    <Eyebrow kanji="忍" label={site.role} class="fade-up" />
+
+    <h1 class="hero-title" aria-label={lines.join(" ")}>
+      {
+        lines.map((line, i) => (
+          <span class="line" aria-hidden="true">
+            <span class:list={[i === lines.length - 1 && "gilt"]}>{line}</span>
+          </span>
+        ))
+      }
+    </h1>
+
+    <p class="lede fade-up">
+      Software announces itself when it fails — 3&nbsp;a.m. pages, mystery bugs, services nobody
+      dares touch. I build products <strong
+        >end to end, one hand from database to last pixel</strong
+      >, and hand them over quiet enough to forget about.
+    </p>
+
+    <div class="cta-row fade-up later">
+      <a class="btn btn-solid" href="#work">Follow the trail</a>
+      <a class="btn btn-ghost" href="#contact">Send word</a>
+    </div>
+
+    <div class="hero-meta fade-up later">
+      <span>Based in {site.location} <span class="dot">&#9672;</span> working worldwide</span>
+      <span
+        >Available {site.availability} <span class="dot">&#9672;</span> two engagements open</span
+      >
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-title {
+    margin: 0 0 2.2rem;
+    max-width: 12ch;
+    font-size: clamp(2.8rem, 8vw, 6.6rem);
+    font-weight: 500;
+    line-height: 1.01;
+    letter-spacing: -0.02em;
+  }
+  .line {
+    display: block;
+    overflow: hidden;
+  }
+  .line > span {
+    display: block;
+  }
+
+  /* Each line rises out of its own overflow box, staggered. */
+  :global(.js) .line > span {
+    transform: translateY(110%);
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+  :global(.js.loaded) .line > span {
+    transform: none;
+  }
+  :global(.js) .line:nth-child(2) > span {
+    transition-delay: 0.12s;
+  }
+  :global(.js) .line:nth-child(3) > span {
+    transition-delay: 0.24s;
+  }
+
+  .lede {
+    margin: 0 0 2.8rem;
+    max-width: 34rem;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    color: var(--color-muted);
+  }
+  .lede strong {
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+
+  /* .fade-up itself is global — it is applied across component boundaries.
+     See src/styles/global.css. */
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+  .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 0.95rem 1.7rem;
+    border: 1px solid var(--color-gold);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .btn-solid {
+    background: var(--color-gold);
+    color: #0b0a08;
+    font-weight: 700;
+  }
+  .btn-solid:hover,
+  .btn-solid:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(216, 179, 106, 0.3);
+  }
+  .btn-ghost {
+    color: var(--color-paper);
+  }
+  .btn-ghost::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .btn-ghost:hover,
+  .btn-ghost:focus-visible {
+    color: #0b0a08;
+  }
+  .btn-ghost:hover::after,
+  .btn-ghost:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2.5rem;
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .dot {
+    color: var(--color-gold);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .line > span {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { initLoaded } from "../scripts/loaded";
+  import { initMotes } from "../scripts/motes";
+  initLoaded();
+  initMotes();
+</script>

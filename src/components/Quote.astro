@@ -1,0 +1,44 @@
+---
+import Section from "./Section.astro";
+---
+
+<Section trail={0.5} trailX={0.5} ariaLabel="Client reference">
+  <figure class="quote reveal">
+    <blockquote>
+      Artur is the only engineer we've worked with who argued <em>against</em> building something we
+      asked for — and was right. The system he did build hasn't paged anyone in fourteen months.
+    </blockquote>
+    <figcaption>Marina Duarte &#9672; CTO, Ledgerline</figcaption>
+  </figure>
+</Section>
+
+<style>
+  .quote {
+    margin: 0;
+    max-width: 48rem;
+    padding-left: clamp(1.4rem, 3vw, 2.4rem);
+    border-left: 2px solid var(--color-gold-deep);
+  }
+  blockquote {
+    margin: 0;
+    font-size: clamp(1.4rem, 2.9vw, 2.1rem);
+    font-style: italic;
+    line-height: 1.45;
+  }
+  blockquote::before {
+    content: "\201C";
+    color: var(--color-gold);
+  }
+  blockquote::after {
+    content: "\201D";
+    color: var(--color-gold);
+  }
+  figcaption {
+    margin-top: 1.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+</style>
