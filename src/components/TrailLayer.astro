@@ -1,19 +1,16 @@
 ---
-// The scroll-drawn line running the height of the document. The path is built
-// at runtime from every [data-trail] element on the page.
+// The layer the trail is drawn into. Empty on the server: the path is built at
+// runtime from every [data-trail] element, and which shape it takes belongs to
+// the variant selected in src/scripts/trail.ts.
 ---
 
 <div id="trail-wrap" aria-hidden="true">
-  <svg id="trail-svg" preserveAspectRatio="none">
-    <path id="trail-ghost" d=""></path>
-    <path id="trail-path" d=""></path>
-    <g id="trail-nodes"></g>
-    <circle id="trail-head" r="3.4" cx="-99" cy="-99"></circle>
-  </svg>
+  <svg id="trail-svg" preserveAspectRatio="none"></svg>
 </div>
 
 <style is:global>
-  /* Global: the nodes are created by script, so scoping hashes can't reach them. */
+  /* Global: every element below is created by script, so scoping hashes
+     can't reach them. */
   #trail-wrap {
     position: absolute;
     inset: 0 auto auto 0;
@@ -27,31 +24,17 @@
     display: block;
     width: 100%;
   }
-  #trail-path {
-    stroke: var(--color-gold);
-    stroke-width: 1.4;
-    fill: none;
-    vector-effect: non-scaling-stroke;
-    filter: drop-shadow(0 0 7px rgba(216, 179, 106, 0.5));
-    opacity: 0.8;
-  }
-  #trail-ghost {
-    stroke: rgba(236, 234, 225, 0.07);
-    stroke-width: 1;
-    fill: none;
-    stroke-dasharray: 2 7;
-    vector-effect: non-scaling-stroke;
-  }
-  #trail-head {
-    fill: var(--color-blade);
-    filter: drop-shadow(0 0 9px rgba(198, 214, 230, 0.9));
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
+
+  /* ---- shared across variants ---- */
+
+  /* The markers are deliberately the same everywhere, so a comparison
+     between variants is a comparison of the line and nothing else. */
   .trail-node {
     fill: #171b24;
     stroke: rgba(216, 179, 106, 0.3);
     stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
     transition:
       fill 0.6s ease,
       stroke 0.6s ease;
@@ -60,6 +43,158 @@
     fill: var(--color-gold);
     stroke: var(--color-gold-pale);
     filter: drop-shadow(0 0 6px rgba(216, 179, 106, 0.75));
+  }
+
+  .trail-ghost {
+    stroke: rgba(236, 234, 225, 0.07);
+    stroke-width: 1;
+    fill: none;
+    stroke-dasharray: 2 7;
+    vector-effect: non-scaling-stroke;
+  }
+  .trail-stroke {
+    stroke: var(--color-gold);
+    stroke-width: 1.4;
+    fill: none;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 7px rgba(216, 179, 106, 0.5));
+    opacity: 0.8;
+  }
+  .trail-head {
+    fill: var(--color-blade);
+    filter: drop-shadow(0 0 9px rgba(198, 214, 230, 0.9));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  /* ---- ink: the same line as a sumi-e stroke ---- */
+
+  /* The stain the stroke will follow. Left unfiltered on purpose — a
+     displacement filter spanning the whole document is a surface the size of
+     the page, and at this weight the texture would not be visible anyway. */
+  .ink-wash {
+    fill: none;
+    stroke: rgba(216, 179, 106, 0.13);
+    stroke-width: 11;
+    stroke-linecap: round;
+  }
+  .ink-stroke {
+    fill: none;
+    stroke: var(--color-gold);
+    stroke-linecap: round;
+    /* feTurbulence is sampled in user space, so neighbouring segments are
+       displaced identically where they meet and the joins hold.
+       Nothing is chained after it: a drop-shadow here doubled the per-frame
+       cost of the one segment under the head, and ink is matte anyway — the
+       wash below carries what glow this variant gets. */
+    filter: url(#brush);
+  }
+  .ink-tip {
+    fill: var(--color-gold-pale);
+    filter: drop-shadow(0 0 11px rgba(241, 221, 166, 0.5));
+  }
+
+  /* ---- katana: discrete cuts ---- */
+
+  .katana-cut {
+    fill: var(--color-gold);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-box: fill-box;
+    transform-origin: left center;
+    filter: drop-shadow(0 0 8px rgba(216, 179, 106, 0.4));
+  }
+  .katana-edge {
+    fill: none;
+    stroke: var(--color-blade);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+  /* Landing is the fast part; what follows is the mark cooling off. */
+  .katana-slash.cut .katana-cut {
+    animation: katana-land 2.4s var(--ease-out-expo) forwards;
+  }
+  .katana-slash.cut .katana-edge {
+    animation: katana-edge 1.2s ease-out forwards;
+  }
+
+  @keyframes katana-land {
+    0% {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    8% {
+      transform: scaleX(1);
+      opacity: 0.92;
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0.34;
+    }
+  }
+  @keyframes katana-edge {
+    0% {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    9% {
+      transform: scaleX(1);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+
+  /* ---- shuriken: the blade that leaves the line ---- */
+
+  .trail-blade {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    filter: drop-shadow(0 0 8px rgba(216, 179, 106, 0.55));
+  }
+  .trail-blade-recoil,
+  .trail-blade-spin {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .trail-blade-spin {
+    animation: blade-spin 1.4s linear infinite;
+  }
+  /* 14 in local units under the 0.1 scale of the crest artwork — 1.4 on screen,
+     matching every other line on the page. */
+  .blade-star,
+  .blade-hub {
+    fill: none;
+    stroke: var(--color-gold);
+    stroke-width: 14;
+    stroke-linejoin: round;
+  }
+
+  @keyframes blade-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  /* The marker takes the hit, rather than only lighting up. */
+  .trail-node.struck {
+    animation: node-struck 0.5s ease-out;
+  }
+  @keyframes node-struck {
+    0% {
+      transform: scale(1);
+    }
+    28% {
+      transform: scale(1.85);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 </style>
 

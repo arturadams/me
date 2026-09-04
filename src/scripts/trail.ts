@@ -1,102 +1,46 @@
 import { prefersReducedMotion } from "./motion";
+import { createInk } from "./trail-variants/ink";
+import { createKatana } from "./trail-variants/katana";
+import { createLine } from "./trail-variants/line";
+import { createShuriken } from "./trail-variants/shuriken";
+import type { Point, TrailVariant } from "./trail-variants/types";
 
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface TrailNode {
-  el: SVGPathElement;
-  /** Fraction along the path, 0–1, at which this node lights up. */
-  at: number;
-}
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-const SAMPLES = 260;
 const SMOOTHING = 0.1;
-const NODE_RADIUS = 4.5;
 /** How far down the viewport the head of the trail sits. */
 const HEAD_OFFSET = 0.75;
 
-function toPathData(points: readonly Point[]): string {
-  const first = points[0];
-  if (!first) return "";
+/**
+ * Prototypes, reachable with `?trail=katana` and friends. The line is the one
+ * that ships; the rest are here to be compared against it and then deleted.
+ */
+const VARIANTS: Record<string, () => TrailVariant> = {
+  line: createLine,
+  ink: createInk,
+  katana: createKatana,
+  shuriken: createShuriken,
+};
 
-  let d = `M ${first.x} ${first.y}`;
-  for (let i = 1; i < points.length; i++) {
-    const from = points[i - 1];
-    const to = points[i];
-    if (!from || !to) continue;
-    // Vertical-tangent cubic: the line leaves and enters each waypoint straight down.
-    const mid = (from.y + to.y) / 2;
-    d += ` C ${from.x} ${mid}, ${to.x} ${mid}, ${to.x} ${to.y}`;
-  }
-  return d;
-}
-
-function diamond(at: Point, r: number): SVGPathElement {
-  const el = document.createElementNS(SVG_NS, "path");
-  el.setAttribute(
-    "d",
-    `M${at.x} ${at.y - r}L${at.x + r} ${at.y}L${at.x} ${at.y + r}L${at.x - r} ${at.y}Z`,
-  );
-  el.setAttribute("class", "trail-node");
-  return el;
-}
-
-function nearestFraction(sampled: readonly DOMPoint[], target: Point): number {
-  let best = 0;
-  let bestDistance = Number.POSITIVE_INFINITY;
-
-  for (let i = 0; i < sampled.length; i++) {
-    const point = sampled[i];
-    if (!point) continue;
-    const dx = point.x - target.x;
-    const dy = point.y - target.y;
-    const distance = dx * dx + dy * dy;
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      best = i;
-    }
-  }
-
-  return best / (sampled.length - 1);
-}
-
-interface TrailElements {
-  svg: SVGSVGElement;
-  path: SVGPathElement;
-  ghost: SVGPathElement;
-  group: SVGGElement;
-  head: SVGCircleElement;
-}
-
-/** Returns null unless the whole layer is present, so callers guard once. */
-function queryElements(): TrailElements | null {
-  const svg = document.querySelector<SVGSVGElement>("#trail-svg");
-  const path = document.querySelector<SVGPathElement>("#trail-path");
-  const ghost = document.querySelector<SVGPathElement>("#trail-ghost");
-  const group = document.querySelector<SVGGElement>("#trail-nodes");
-  const head = document.querySelector<SVGCircleElement>("#trail-head");
-  if (!svg || !path || !ghost || !group || !head) return null;
-  return { svg, path, ghost, group, head };
+function chooseVariant(): TrailVariant {
+  const requested = new URLSearchParams(window.location.search).get("trail") ?? "";
+  return (VARIANTS[requested] ?? createLine)();
 }
 
 /**
- * Draws a line down the page as you scroll, lighting a marker at each
- * section it passes and trailing a glint at its head.
+ * Marks a path down the page as you scroll, lighting a marker at each section
+ * it passes. Owns the geometry, the scroll position and the frame loop; how
+ * any of it is drawn belongs to the variant.
  */
 export function initTrail(): void {
-  const found = queryElements();
+  const found = document.querySelector<SVGSVGElement>("#trail-svg");
   if (!found) return;
-  // Destructured so the nested declarations below see non-nullable types:
+  // Rebound so the nested declarations below see a non-nullable type:
   // narrowing does not survive into hoisted function declarations.
-  const { svg, path, ghost, group, head } = found;
+  const svg = found;
 
   const root = document.documentElement;
-  let pathLength = 0;
-  let nodes: TrailNode[] = [];
+  const variant = chooseVariant();
   let progress = 0;
+  let ready = false;
 
   function waypoints(width: number): Point[] {
     return Array.from(document.querySelectorAll<HTMLElement>("[data-trail]"), (el) => {
@@ -109,65 +53,45 @@ export function initTrail(): void {
   }
 
   function update(instant: boolean): void {
-    if (pathLength === 0) return;
+    if (!ready) return;
     const reduced = prefersReducedMotion();
 
     const reach = (window.scrollY + window.innerHeight * HEAD_OFFSET) / root.scrollHeight;
     const target = reduced ? 1 : Math.min(Math.max(reach, 0.04), 1);
     progress = instant || reduced ? target : progress + (target - progress) * SMOOTHING;
 
-    path.style.strokeDashoffset = String(pathLength * (1 - progress));
-    for (const node of nodes) node.el.classList.toggle("lit", progress >= node.at);
-
-    if (!reduced) {
-      const tip = path.getPointAtLength(pathLength * progress);
-      head.setAttribute("cx", String(tip.x));
-      head.setAttribute("cy", String(tip.y));
-      head.style.opacity = progress > 0.995 ? "0" : "1";
-    }
+    variant.update(progress);
   }
 
   function build(): void {
     const width = root.clientWidth;
-    const docHeight = root.scrollHeight;
+    const height = root.scrollHeight;
 
-    svg.setAttribute("viewBox", `0 0 ${width} ${docHeight}`);
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
     svg.setAttribute("width", String(width));
-    svg.setAttribute("height", String(docHeight));
+    svg.setAttribute("height", String(height));
 
     const marks = waypoints(width);
     if (marks.length < 2) return;
 
-    // Synthetic endpoints so the line enters at the top and exits at the bottom.
-    const points: Point[] = [{ x: width * 0.62, y: 0 }, ...marks, { x: width * 0.5, y: docHeight }];
-
-    const d = toPathData(points);
-    path.setAttribute("d", d);
-    ghost.setAttribute("d", d);
-    pathLength = path.getTotalLength();
-    path.style.strokeDasharray = String(pathLength);
-
-    const sampled: DOMPoint[] = [];
-    for (let i = 0; i <= SAMPLES; i++) {
-      sampled.push(path.getPointAtLength((pathLength * i) / SAMPLES));
-    }
-
-    group.textContent = "";
-    nodes = marks.map((mark) => {
-      const el = diamond(mark, NODE_RADIUS);
-      group.appendChild(el);
-      return { el, at: nearestFraction(sampled, mark) };
+    variant.destroy();
+    variant.build({
+      svg,
+      marks,
+      // Synthetic endpoints so the trail enters at the top and exits at the bottom.
+      points: [{ x: width * 0.62, y: 0 }, ...marks, { x: width * 0.5, y: height }],
+      width,
+      height,
+      reduced: prefersReducedMotion(),
     });
+    ready = true;
 
     update(true);
   }
 
   build();
 
-  if (prefersReducedMotion()) {
-    path.style.strokeDashoffset = "0";
-    for (const node of nodes) node.el.classList.add("lit");
-  } else {
+  if (!prefersReducedMotion()) {
     const loop = (): void => {
       update(false);
       requestAnimationFrame(loop);
